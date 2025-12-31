@@ -1,0 +1,17 @@
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Env
+.env
+
+# Build artifacts
+dist/
+build/
