@@ -1,26 +1,94 @@
-# Sensor Data Exchange Node (SDEN)
+<div align="center">
+  <img src="docs/diagrams/logo.png" alt="SDEN Logo" width="180" />
+  <h1>Sensor Data Exchange Node (SDEN)</h1>
+  <p>
+    A decentralized, self-hosted data commerce infrastructure for live sensor signals.
+  </p>
+  <p>
+    <a href="https://github.com/intrinsicinvestment91/sensor-data-exchange-node/stargazers">
+      <img src="https://img.shields.io/github/stars/intrinsicinvestment91/sensor-data-exchange-node?style=social" alt="GitHub stars" />
+    </a>
+    <a href="LICENSE">
+      <img src="https://img.shields.io/github/license/intrinsicinvestment91/sensor-data-exchange-node" alt="License" />
+    </a>
+    <a href="https://github.com/intrinsicinvestment91/sensor-data-exchange-node/actions">
+      <img src="https://img.shields.io/github/workflow/status/intrinsicinvestment91/sensor-data-exchange-node/CI" alt="CI status" />
+    </a>
+  </p>
+</div>
 
-SDEN is an early-stage project exploring how self-hosted edge nodes can expose
-sensor data through secure, explicit interfaces.
+---
 
-The focus is practical deployment on commodity hardware and clear trust
-boundaries, not speculative infrastructure.
+## 📌 What is SDEN?
 
-## Scope
+Sensor Data Exchange Node (SDEN) is an open infrastructure project that enables **self-hosted sensor nodes** to securely publish and sell *live, verifiable data* — directly to AI systems, autonomous agents, and buyers — without centralized cloud dependence.  
+SDEN uses **cryptographic identity** and **Bitcoin Lightning micropayments** to unlock new data economics for producers and consumers alike.
 
-- Local sensor ingestion
-- Authenticated data access
-- Explicit operator control
-- Optional metering or settlement
+---
 
-## Non-goals
+## 🧠 Why SDEN Matters
 
-- Not a decentralized internet
-- Not a token project
-- Not a cloud replacement
+Traditional IoT ecosystems centralize ownership and monetization — locking producers out of their own data. SDEN changes this by empowering local operators to:
 
-See `docs/non-goals.md` for details.
+- ✊ Retain **full control of their sensor data**
+- 🔐 Provide **provable, signed live signals**
+- ⚡ Monetize through **machine-to-machine payments**
+- 📡 Support **AI and automated agents** with fresh inputs
 
-## Status
+---
 
-Design and scaffolding phase.
+## 🔍 Table of Contents
+
+1. [Features](#features)  
+2. [Architecture](#architecture)  
+3. [Installation](#installation)  
+4. [Quick Start](#quick-start)  
+5. [Configuration](#configuration)  
+6. [Use Cases](#use-cases)  
+7. [Contributing](#contributing)  
+8. [License](#license)  
+9. [Contact & Links](#contact--links)
+
+---
+
+## ✨ Features
+
+- 📡 Self-hosted live sensor ingestion and processing  
+- 🔒 Cryptographically signed datasets with verifiable provenance  
+- ⚖️ Lightning Network micropayment settlement  
+- 🧪 Modular node types: Producer, Buyer, Relay  
+- 🔄 Extensible API interface (see RIS documentation)
+
+---
+
+## 🏗 Architecture
+
+View detailed designs and protocol flows in the `docs/` folder.  
+Key artifacts include:
+
+- **Whitepaper (Frozen v1.0)** — Vision and economic grounding  
+- **Reference Implementation Spec (RIS v1.0)** — Build contract  
+- **Diagrams** — Architecture, state machines, interactions
+
+---
+
+## 📥 Installation
+
+> *Coming soon — detailed installation scripts and automation.*
+
+In general:
+
+1. Clone the repository  
+2. Install runtime dependencies  
+3. Review config samples in `configs/`  
+4. Run demo scripts from `examples/`
+
+---
+
+## ▶️ Quick Start
+
+```bash
+git clone https://github.com/intrinsicinvestment91/sensor-data-exchange-node.git
+cd sensor-data-exchange-node
+./scripts/setup-env.sh
+./scripts/run-demo.sh
