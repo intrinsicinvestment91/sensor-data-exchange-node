@@ -21,23 +21,56 @@
 
 ## 📌 What is SDEN?
 
-Sensor Data Exchange Node (SDEN) is Sensor Data Exchange Node (SDEN)
-Sensor Data Exchange Node (SDEN) is an open protocol specification for hardware-anchored, self-hosted sensor infrastructure.
-SDEN defines how independently operated sensor nodes can cryptographically identify themselves, publish verifiable live data, and exchange that data directly with AI systems, autonomous agents, and external buyers — without reliance on centralized cloud intermediaries.
-The protocol emphasizes:
-Cryptographic node identity
-Hardware anchoring and physical verification
-Integrity-preserving data publication
-Trust-minimized settlement
-Long-term infrastructure durability
-SDEN introduces a settlement abstraction layer that enables nodes to receive micropayments and value transfers across multiple payment systems. Bitcoin Lightning serves as the primary reference implementation for instant, uncensorable, low-friction settlement, while remaining compatible with alternative enterprise or blockchain payment backends.
-This project is not a product or SaaS platform.
-It is a foundational infrastructure thesis and protocol definition designed to support a new class of verifiable, machine-to-machine data markets.
-SDEN is staged development:
-Protocol Specification — defining identity, verification, settlement, and governance models.
-Reference Implementation — minimal open implementations of core protocol components.
-Network Deployment — infrastructure scaling and ecosystem growth.
-The goal is to establish durable, self-hosted data infrastructure where physical nodes, not centralized platforms, anchor trust.
+# Sensor Data Exchange Node (SDEN)
+
+Sensor Data Exchange Node (SDEN) is an **open protocol specification** for hardware-anchored, self-hosted sensor infrastructure.
+
+SDEN defines how independently operated sensor nodes can:
+
+- Cryptographically identify themselves  
+- Publish **verifiable live data**  
+- Exchange that data directly with AI systems, autonomous agents, and external buyers  
+
+—all **without reliance on centralized cloud intermediaries**.
+
+---
+
+## Key Protocol Principles
+
+- **Cryptographic node identity**  
+- **Hardware anchoring and physical verification**  
+- **Integrity-preserving data publication**  
+- **Trust-minimized settlement**  
+- **Long-term infrastructure durability**
+
+---
+
+## Settlement and Payments
+
+SDEN introduces a **settlement abstraction layer** that allows nodes to receive micropayments across multiple payment systems.  
+
+- **Bitcoin Lightning** is the primary reference implementation for instant, uncensorable, low-friction settlement.  
+- The protocol remains compatible with alternative enterprise or blockchain payment backends.
+
+---
+
+## Project Positioning
+
+- **Not a product or SaaS platform**  
+- **Foundational infrastructure thesis** and protocol definition  
+- Supports a new class of **verifiable, machine-to-machine data markets**
+
+---
+
+## Development Stages
+
+1. **Protocol Specification** — defines identity, verification, settlement, and governance models  
+2. **Reference Implementation** — minimal open implementations of core protocol components  
+3. **Network Deployment** — infrastructure scaling and ecosystem growth
+
+---
+
+The goal is to establish **durable, self-hosted data infrastructure** where **physical nodes, not centralized platforms, anchor trust**.
 
 ---
 
