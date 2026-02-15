@@ -21,8 +21,6 @@
 
 ## 📌 What is SDEN?
 
-# Sensor Data Exchange Node (SDEN)
-
 Sensor Data Exchange Node (SDEN) is an **open protocol specification** for hardware-anchored, self-hosted sensor infrastructure.
 
 SDEN defines how independently operated sensor nodes can:
@@ -40,6 +38,10 @@ SDEN defines how independently operated sensor nodes can:
 **Status: Draft Protocol Specification**
 
 The SDEN specification is considered internally stable but subject to external review and implementation feedback.
+
+**Current Phase: Protocol/Spec Maturity**
+
+This repository is currently focused on protocol specification and definition. Reference implementation is in planning. See [Reference Implementation Status](reference-implementation/README.md) for details.
 
 ---
 
@@ -76,8 +78,6 @@ SDEN introduces a **settlement abstraction layer** that allows nodes to receive 
 2. **Reference Implementation** — minimal open implementations of core protocol components  
 3. **Network Deployment** — infrastructure scaling and ecosystem growth
 
----
-
 The goal is to establish **durable, self-hosted data infrastructure** where **physical nodes, not centralized platforms, anchor trust**.
 
 ---
@@ -95,56 +95,54 @@ Traditional IoT ecosystems centralize ownership and monetization — locking pro
 
 ## 🔍 Table of Contents
 
-1. [Features](#features)  
-2. [Architecture](#architecture)  
-3. [Installation](#installation)  
-4. [Quick Start](#quick-start)  
-5. [Configuration](#configuration)  
-6. [Use Cases](#use-cases)  
-7. [Contributing](#contributing)  
-8. [License](#license)  
+1. [Features](docs/FEATURES.md)  
+2. [Architecture](docs/ARCHITECTURE.md)  
+3. [Installation](docs/INSTALLATION.md)  
+4. [Quick Start](docs/QUICKSTART.md)  
+5. [Configuration](docs/CONFIGURATION.md)  
+6. [Use Cases](docs/USE_CASES.md)  
+7. [Contributing](docs/CONTRIBUTING.md)  
+8. [License](LICENSE)  
 9. [Contact & Links](#contact--links)
 
 ---
 
-## ✨ Features
+## 🚀 How to Engage
 
-- 📡 Self-hosted live sensor ingestion and processing  
-- 🔒 Cryptographically signed datasets with verifiable provenance  
-- ⚖️ Lightning Network micropayment settlement  
-- 🧪 Modular node types: Producer, Buyer, Relay  
-- 🔄 Extensible API interface (see RIS documentation)
+### Review Protocol Specifications
 
----
+SDEN is currently in **protocol/spec maturity** phase. The authoritative protocol specifications are available in:
 
-## 🏗 Architecture
+- **[Protocol Specifications](docs/spec/)** — Core protocol definitions
+- **[Reference Implementation Spec (RIS)](docs/ris/)** — Build contract for reference implementation
+- **[Documentation Index](docs/README.md)** — Overview of all documentation
 
-View detailed designs and protocol flows in the `docs/` folder.  
-Key artifacts include:
+### Contribute
 
-- **Whitepaper (Frozen v1.0)** — Vision and economic grounding  
-- **Reference Implementation Spec (RIS v1.0)** — Build contract  
-- **Diagrams** — Architecture, state machines, interactions
+Contributions are welcome at this stage:
 
----
+- **Protocol Review**: Review and provide feedback on protocol specifications in `docs/spec/`
+- **Spec Contributions**: Propose improvements or clarifications to the protocol definition
+- **Reference Implementation**: Contribute to the reference implementation (see [Reference Implementation Status](reference-implementation/README.md))
 
-## 📥 Installation
+See [Contributing Guidelines](docs/CONTRIBUTING.md) for details.
 
-> *Coming soon — detailed installation scripts and automation.*
+### Implement
 
-In general:
+The SDEN protocol specification is designed to enable independent implementations. To implement SDEN:
 
-1. Clone the repository  
-2. Install runtime dependencies  
-3. Review config samples in `configs/`  
-4. Run demo scripts from `examples/`
+1. Review the [Protocol Specifications](docs/spec/) to understand the protocol requirements
+2. Consult the [Reference Implementation Spec](docs/ris/) for implementation guidance
+3. Build your implementation following the protocol rules defined in the specifications
+
+Alternative implementations are encouraged, provided they adhere to the protocol rules defined in the specification.
 
 ---
 
-## ▶️ Quick Start
+## 📞 Contact & Links
 
-```bash
-git clone https://github.com/intrinsicinvestment91/sensor-data-exchange-node.git
-cd sensor-data-exchange-node
-./scripts/setup-env.sh
-./scripts/run-demo.sh
+- **GitHub Repository**: [intrinsicinvestment91/sensor-data-exchange-node](https://github.com/intrinsicinvestment91/sensor-data-exchange-node)
+- **License**: [LICENSE](LICENSE)
+- **Documentation**: [docs/README.md](docs/README.md)
+- **Protocol Specifications**: [docs/spec/](docs/spec/)
+- **Reference Implementation Spec**: [docs/ris/](docs/ris/)
