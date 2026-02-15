@@ -35,6 +35,14 @@ SDEN defines how independently operated sensor nodes can:
 
 ---
 
+## Protocol Status
+
+**Status: Draft Protocol Specification**
+
+The SDEN specification is considered internally stable but subject to external review and implementation feedback.
+
+---
+
 ## Key Protocol Principles
 
 - **Cryptographic node identity**  
