@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Check out bitagent
+        uses: actions/checkout@v4
+        with:
+          repository: Intrinsicinvestment91/bitagent
+          path: bitagent
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements-dev.txt
+          pip install -r bitagent/requirements.txt
+          pip install -e sden-client/
+
+      - name: Lint (ruff)
+        run: ruff check sden/ tests/
+
+      - name: Type check (mypy)
+        run: mypy sden/ --ignore-missing-imports
+
+      - name: Test
+        env:
+          PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/bitagent
+          LNBITS_URL: https://mock.lnbits.test
+          LNBITS_API_KEY: mock-key-for-ci
+          USE_MOCK_SENSOR: "true"
+        run: pytest -v --tb=short
+
+      - name: Benchmark (RIS timing targets)
+        env:
+          PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/bitagent
+          LNBITS_URL: https://mock.lnbits.test
+          LNBITS_API_KEY: mock-key-for-ci
+          USE_MOCK_SENSOR: "true"
+        run: pytest tests/test_benchmark.py -v --tb=short

@@ -1,0 +1,31 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sden-client"
+version = "0.1.0"
+description = "Python buyer SDK for SDEN sensor data nodes"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.28",
+    "cryptography>=43",
+    "base58>=2.1",
+    "click>=8.0",
+    "pydantic>=2.0",
+]
+
+[project.scripts]
+sden-buy = "sden_client.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Intrinsicinvestment91/sensor-data-exchange-node"
+Repository = "https://github.com/Intrinsicinvestment91/sensor-data-exchange-node"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["sden_client"]

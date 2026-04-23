@@ -15,3 +15,18 @@
 # Build artifacts
 dist/
 build/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+*.egg-info/
+.eggs/
+
+# Runtime state
+audit.db
+identity.pem
+sden_data/

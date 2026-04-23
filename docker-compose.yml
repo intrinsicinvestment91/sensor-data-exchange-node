@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  producer:
+    build: .
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      USE_MOCK_SENSOR: "true"
+      SDEN_HOST: "0.0.0.0"
+      SDEN_PORT: "8080"
+      AUDIT_DB_PATH: "/app/data/audit.db"
+      DID_KEY_PATH: "/app/data/identity.pem"
+    volumes:
+      - sden_data:/app/data
+    restart: unless-stopped
+
+volumes:
+  sden_data:
