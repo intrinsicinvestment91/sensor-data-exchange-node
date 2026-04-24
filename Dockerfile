@@ -12,9 +12,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy bitagent (provides Agent base class and AgentWallet)
-COPY ../bitagent /bitagent
-RUN pip install --no-cache-dir -r /bitagent/requirements.txt
+# Vendor copies of the two bitagent files SDEN needs at runtime
+COPY bitagent/ /bitagent/
 
 COPY sden/ ./sden/
 

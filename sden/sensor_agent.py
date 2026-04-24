@@ -15,8 +15,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 
-# Bring bitagent onto sys.path so AgentWallet is importable
-_BITAGENT = os.path.join(os.path.dirname(__file__), "..", "..", "bitagent")
+# Bring vendored bitagent/ onto sys.path so AgentWallet is importable
+_BITAGENT = os.path.join(os.path.dirname(__file__), "..", "bitagent")
 if os.path.isdir(_BITAGENT) and _BITAGENT not in sys.path:
     sys.path.insert(0, _BITAGENT)
 

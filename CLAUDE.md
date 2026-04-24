@@ -11,9 +11,9 @@ The overhaul plan is in `docs/PLAN.md` — consult it before starting any implem
 
 ## Current Status
 
-**Phase 2 (protocol hardening) complete. Phase 3 (developer experience) is next.**
+**Phase 3 (developer experience) complete. Phase 4 (positioning and community) is next.**
 
-All core modules exist under `sden/`. 32 tests pass (`pytest tests/`). The plan in `docs/PLAN.md` defines the full phase-by-phase roadmap. The competitive positioning is: *"DePIN on Bitcoin. No new token. No new blockchain."*
+Core producer modules exist under `sden/`. Buyer SDK exists under `sden-client/`. Tests cover both (`pytest` runs `tests/` and `sden-client/tests/`). The plan in `docs/PLAN.md` defines the full phase-by-phase roadmap. The competitive positioning is: *"DePIN on Bitcoin. No new token. No new blockchain."*
 
 ## Development Setup
 
@@ -52,10 +52,10 @@ python -m sden.main
 make test           # runs ruff + mypy + pytest
 make benchmark      # assert RIS timing targets
 
-ruff check sden/ tests/                                          # linter only
-mypy sden/ --ignore-missing-imports                              # type-check only
-pytest tests/                                                    # full test suite
-pytest tests/test_integration.py::test_full_buy_cycle -v        # single test
+ruff check sden/ tests/ sden-client/sden_client/ sden-client/tests/  # linter only
+mypy sden/ --ignore-missing-imports                                   # type-check only
+pytest                                                                # full test suite (both sden/ and sden-client/)
+pytest tests/test_integration.py::test_full_buy_cycle -v             # single test
 ```
 
 ## The Bigger Picture — BitAgent
@@ -166,14 +166,18 @@ sden/
 
 **MockSensorReader** supports: `temperature`, `humidity`, `pressure`, `co2`. Seeded with a fixed `seed` int for deterministic tests.
 
-**`sden-client/`** (buyer SDK, published to PyPI as `sden-client`) — to be created in Phase 3:
+**`sden-client/`** (buyer SDK, published to PyPI as `sden-client`) — exists and is complete:
 ```
 sden-client/
   sden_client/
-    buyer.py    # SDENBuyer class
-    models.py   # SensorReading with .verify()
-    cli.py      # `sden-buy` CLI command
+    buyer.py    # SDENBuyer.buy() — full quote→pay→verify→data cycle; .last_price_sats
+    wallet.py   # SDENWallet — wraps LNbits for outbound payments (needs admin key)
+    models.py   # SensorReading with .verify() (Ed25519 sig check against producer DID)
+    cli.py      # `sden-buy` CLI: --url, --type, --output json|human, --verify-only <file>
+  tests/        # pytest suite for the buyer SDK
 ```
+
+`SDENWallet` requires a **LNbits admin key** (not the invoice/read key) to pay outgoing invoices. `SDENBuyer` accepts any object with a `.pay_invoice(bolt11)` method, so you can substitute a mock in tests.
 
 ## BitAgent Integration — Critical Caveats
 
