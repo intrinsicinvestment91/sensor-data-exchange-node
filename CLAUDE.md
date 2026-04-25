@@ -17,14 +17,9 @@ Core producer modules exist under `sden/`. Buyer SDK exists under `sden-client/`
 
 ## Development Setup
 
-Install BitAgent's dependencies first (SDEN depends on `bitagent/agent_wallet.py` at runtime):
+Requires **Python 3.12+**. The project vendors two files from bitagent — `bitagent/agent_wallet.py` and `bitagent/lnbits_client.py` — directly in the project root. No separate bitagent checkout is needed for development; their runtime dependencies (`requests`, `python-dotenv`) are pulled in by `requirements.txt`. The full `/home/charlie/bitagent` repo is only referenced when exploring the broader bitagent codebase.
 
-```bash
-cd /home/charlie/bitagent
-pip install -r requirements.txt
-```
-
-Then install SDEN's own dev dependencies and create a `.env` in the project root:
+Install SDEN's dev dependencies and create a `.env` in the project root:
 
 ```bash
 cd /home/charlie/sensor-data-exchange-node
@@ -49,11 +44,11 @@ docker-compose up
 python -m sden.main
 
 # Lint / type-check / test (CI mirrors these exactly)
-make test           # runs ruff + mypy + pytest
-make benchmark      # assert RIS timing targets
+make test           # runs ruff + mypy + pytest (does NOT run benchmark)
+make benchmark      # runs tests/test_benchmark.py only — asserts RIS timing targets
 
 ruff check sden/ tests/ sden-client/sden_client/ sden-client/tests/  # linter only
-mypy sden/ --ignore-missing-imports                                   # type-check only
+mypy sden/ --ignore-missing-imports                                   # type-check sden/ only (sden-client/ not covered)
 pytest                                                                # full test suite (both sden/ and sden-client/)
 pytest tests/test_integration.py::test_full_buy_cycle -v             # single test
 ```
@@ -161,6 +156,8 @@ sden/
   sensor_reader.py     # MockSensorReader + DHT22Reader; factory: make_reader(type, use_mock)
   pricing.py           # PricingEngine ABC + FlatPricingEngine (PRICE_SATS env var)
 ```
+
+**`reference-implementation/`** is a spec-compliance placeholder (README only, no code). The working implementation is `sden/`.
 
 **`SensorAgent` is standalone** — it does **not** extend `bitagent/src/core/agent.py:Agent`. The bitagent `Agent` base class cannot be instantiated (see caveat below). `SensorAgent` owns its own `AuditDB`, `DIDIdentity`, `StateMachine`, and `AgentWallet` directly.
 
