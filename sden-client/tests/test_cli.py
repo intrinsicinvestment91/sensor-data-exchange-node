@@ -1,12 +1,10 @@
 import json
-import uuid
 from unittest.mock import MagicMock, patch
 
 import pytest
 from click.testing import CliRunner
 
 from sden_client.cli import main
-from sden_client.models import SensorReading
 
 
 @pytest.fixture

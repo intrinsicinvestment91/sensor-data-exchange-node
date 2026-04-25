@@ -8,10 +8,10 @@ load_dotenv()
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s — %(message)s")
 
-from sden.did_identity import DIDIdentity
-from sden.pricing import FlatPricingEngine
-from sden.sensor_agent import SensorAgent, build_app
-from sden.sensor_reader import make_reader
+from sden.did_identity import DIDIdentity  # noqa: E402
+from sden.pricing import FlatPricingEngine  # noqa: E402
+from sden.sensor_agent import SensorAgent, build_app  # noqa: E402
+from sden.sensor_reader import make_reader  # noqa: E402
 
 
 def main() -> None:

@@ -6,7 +6,6 @@ from unittest.mock import MagicMock, patch
 import pytest
 from fastapi.testclient import TestClient
 
-from sden.did_identity import DIDIdentity
 from sden.models import ErrorCode
 from sden.pricing import FlatPricingEngine
 from sden.sensor_agent import SensorAgent, build_app

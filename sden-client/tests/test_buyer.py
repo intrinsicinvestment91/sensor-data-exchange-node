@@ -5,7 +5,6 @@ import httpx
 import pytest
 
 from sden_client.buyer import SDENBuyer
-from sden_client.models import SensorReading
 
 
 def _mock_response(status_code: int, data: dict) -> MagicMock:

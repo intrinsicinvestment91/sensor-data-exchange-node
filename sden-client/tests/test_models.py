@@ -1,7 +1,4 @@
 import base64
-import json
-
-import pytest
 
 from sden_client.models import SensorReading
 
@@ -28,7 +25,7 @@ def test_verify_tampered_quality_score(valid_reading):
 def test_verify_wrong_did(valid_reading, test_did):
     from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
     from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
-    import base58, base64
+    import base58
 
     other_key = Ed25519PrivateKey.generate()
     pub_bytes = other_key.public_key().public_bytes(Encoding.Raw, PublicFormat.Raw)

@@ -1,7 +1,4 @@
-import json
 import os
-
-import pytest
 
 from sden.did_identity import DIDIdentity, verify_did_signature
 

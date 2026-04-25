@@ -15,13 +15,6 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 
-# Bring vendored bitagent/ onto sys.path so AgentWallet is importable
-_BITAGENT = os.path.join(os.path.dirname(__file__), "..", "bitagent")
-if os.path.isdir(_BITAGENT) and _BITAGENT not in sys.path:
-    sys.path.insert(0, _BITAGENT)
-
-from agent_wallet import AgentWallet  # noqa: E402
-
 from sden.audit_db import AuditDB
 from sden.did_identity import DIDIdentity
 from sden.did_identity import verify_did_signature
@@ -37,8 +30,15 @@ from sden.models import (
     VerifyPaymentResponse,
 )
 from sden.pricing import FlatPricingEngine, PricingEngine
-from sden.sensor_reader import SensorReader, make_reader
+from sden.sensor_reader import SensorReader
 from sden.state_machine import State, StateMachine
+
+# Bring vendored bitagent/ onto sys.path so AgentWallet is importable
+_BITAGENT = os.path.join(os.path.dirname(__file__), "..", "bitagent")
+if os.path.isdir(_BITAGENT) and _BITAGENT not in sys.path:
+    sys.path.insert(0, _BITAGENT)
+
+from agent_wallet import AgentWallet  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
@@ -200,7 +200,7 @@ class SensorAgent:
             request_id=req.request_id,
             price_sats=price_sats,
             invoice=invoice_data["bolt11"],
-            checking_id=self._current_checking_id,
+            checking_id=invoice_data["checking_id"],
         )
 
     def verify_payment(self, req: VerifyPaymentRequest) -> VerifyPaymentResponse:
@@ -284,7 +284,15 @@ class SensorAgent:
             {"value": raw.value, "units": raw.units},
         )
 
-        return SensorReading(**reading_dict, signature=signature)
+        return SensorReading(
+            producer_did=self.did,
+            sensor_type=self._sensor_reader.sensor_type,
+            timestamp_utc=raw.timestamp_utc,
+            value=raw.value,
+            units=raw.units,
+            quality_score=raw.quality_score,
+            signature=signature,
+        )
 
 
 def build_app(agent: SensorAgent) -> FastAPI:

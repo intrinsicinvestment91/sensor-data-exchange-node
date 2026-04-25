@@ -246,15 +246,15 @@ The producer is a single `SensorAgent` class wired to a FastAPI app. On each `/q
 
 ## Performance
 
-Targets measured on minimum hardware (2-core ARMv8, 2 GB RAM) and enforced in CI via `make benchmark`:
+Targets from RIS v1.0, measured on minimum hardware (2-core ARMv8, 2 GB RAM). The CI benchmark (`make benchmark`) asserts the two end-to-end targets against a mock wallet; the per-operation LNbits targets apply to production deployments.
 
-| Operation | Target |
-|---|---|
-| Quote response (invoice creation) | < 500 ms |
-| Invoice generation (LNbits round-trip) | < 100 ms |
-| Invoice verification (LNbits check) | < 1 s |
-| Data retrieval + Ed25519 signing | < 2 s |
-| **Total end-to-end** | **< 3.5 s** |
+| Operation | Target | CI enforced |
+|---|---|:---:|
+| Quote response | < 500 ms | ✓ |
+| Invoice generation (LNbits round-trip) | < 100 ms | |
+| Invoice verification (LNbits check) | < 1 s | |
+| Data retrieval + Ed25519 signing | < 2 s | |
+| **Total end-to-end** | **< 3.5 s** | ✓ |
 
 ---
 
