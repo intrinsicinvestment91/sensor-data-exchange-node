@@ -1,45 +1,43 @@
 # Quick Start
 
-> **Status**: Not Implemented - Protocol Specification Phase
-> 
-> This section will be populated when the reference implementation reaches the appropriate maturity level. See [Reference Implementation Status](../reference-implementation/README.md) for current progress.
+The shortest path is the [root README quickstart](../README.md#quickstart). This page summarises it
+and points at the reference material.
 
-## Current Status
+## Run a producer node
 
-SDEN is currently in the **protocol/spec maturity** phase. The protocol specifications are defined and available for review, but the reference implementation is still in planning.
+Requires Python 3.12+ and an [LNbits](https://lnbits.com) wallet. Mock sensor mode is the default —
+no hardware needed.
 
-Quick start guides will be available when:
-- The reference implementation is developed
-- Installation and setup procedures are established
-- Example configurations and demo scripts are created
+```bash
+git clone https://github.com/intrinsicinvestment91/sensor-data-exchange-node
+cd sensor-data-exchange-node
+cp .env.example .env          # set LNBITS_URL and LNBITS_API_KEY
+docker-compose up
+```
 
-## What's Available Now
+The node listens on `http://localhost:8080`. `GET /info` returns its DID, sensor type, and price.
 
-While quick start instructions are not yet available, you can:
+## Buy a reading
 
-- **Review Protocol Specifications**: Start with the [Protocol Overview](spec/overview.md) to understand SDEN
-- **Understand Implementation Requirements**: Review the [Reference Implementation Spec (RIS)](ris/SDEN_RIS_v1.md) to see what implementations will need
-- **Plan Your Implementation**: Use the specifications to design your own SDEN-compliant system
+`sden-client` is not yet published to PyPI — install it from source:
 
-## Reference Implementation Status
+```bash
+pip install -e ./sden-client
+sden-buy --url http://localhost:8080 --type temperature
+```
 
-The reference implementation is currently in planning. When it becomes available, quick start guides will be documented here.
+The [root README](../README.md) shows the Python SDK and raw `curl` equivalents.
 
-For current status, see: [Reference Implementation README](../reference-implementation/README.md)
+## Validation boundary
 
-## Future Quick Start Guide
-
-When the reference implementation is ready, the quick start guide will include:
-
-- Prerequisites and system requirements
-- Installation steps
-- Basic configuration
-- Running your first node
-- Example use cases
+Validation currently uses a mock wallet and mock sensor; no end-to-end run against a live wallet
+and physical sensor is evidenced. See the
+[reference implementation status](../reference-implementation/README.md) for the full breakdown of
+what is implemented, what is validated, and what remains planned.
 
 ## Related Documentation
 
-- [Protocol Specifications](spec/) — Protocol definitions
-- [Reference Implementation Spec](ris/) — Implementation requirements
-- [Installation](INSTALLATION.md) — Installation instructions (when available)
-- [Configuration](CONFIGURATION.md) — Configuration reference (when available)
+- [Protocol Specifications](spec/) — protocol definitions
+- [Reference Implementation Spec (RIS v1.0)](ris/SDEN_RIS_v1.md) — the frozen implementation baseline
+- [Installation](INSTALLATION.md) — installation options
+- [Configuration](CONFIGURATION.md) — environment variable reference

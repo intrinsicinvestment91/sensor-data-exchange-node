@@ -246,7 +246,7 @@ The producer is a single `SensorAgent` class wired to a FastAPI app. On each `/q
 
 ## Performance
 
-Targets from RIS v1.0, measured on minimum hardware (2-core ARMv8, 2 GB RAM). The CI benchmark (`make benchmark`) asserts the two end-to-end targets against a mock wallet; the per-operation LNbits targets apply to production deployments.
+Targets from RIS v1.0, specified for minimum hardware (2-core ARMv8, 2 GB RAM). The CI benchmark (`make benchmark`) asserts the two marked targets against a mock wallet; the per-operation LNbits targets apply to production deployments and are not asserted here.
 
 | Operation | Target | CI enforced |
 |---|---|:---:|
@@ -265,8 +265,10 @@ Targets from RIS v1.0, measured on minimum hardware (2-core ARMv8, 2 GB RAM). Th
 | 0 — Repository Presence | Repo docs, CI, issue templates | ✅ Complete |
 | 1 — Core Reference Implementation | `docker-compose up` delivers a running node | ✅ Complete |
 | 2 — Protocol Hardening | Full RIS compliance, security tests, W3C WoT endpoint | ✅ Complete |
-| 3 — Developer Experience | Buyer SDK, CLI, PyPI release, benchmarks | ✅ Complete |
-| 4 — Positioning & Community | README polish, grant outreach, community onboarding | 🔄 In progress |
+| 3 — Developer Experience | Buyer SDK, CLI, benchmarks | ✅ Complete |
+| 4 — Positioning & Community | README polish, PyPI publication, community onboarding | 🔄 In progress |
+
+`sden-client` is **not yet published to PyPI** — install it from source as shown above.
 
 The full roadmap with task checklists is in [`docs/PLAN.md`](docs/PLAN.md).
 
@@ -284,6 +286,8 @@ pytest tests/test_integration.py::test_full_buy_cycle -v   # single test
 ```
 
 Tests patch `AgentWallet` and skip Nostr — no LNbits instance needed.
+
+**Validation boundary:** validation currently uses a mock wallet and mock sensor; no end-to-end run against a live wallet and physical sensor is evidenced.
 
 ---
 
@@ -316,3 +320,5 @@ SDEN is an open protocol. If you find it useful, consider supporting development
 ## License
 
 [Apache 2.0](LICENSE)
+
+Two vendored files under `bitagent/` are MIT-licensed and are not covered by Apache 2.0 — see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

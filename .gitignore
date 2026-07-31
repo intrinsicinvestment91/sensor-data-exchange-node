@@ -12,6 +12,9 @@
 # Env
 .env
 
+# Local developer overrides (machine-specific paths belong here, not in tracked config)
+.claude/settings.local.json
+
 # Build artifacts
 dist/
 build/

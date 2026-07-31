@@ -84,7 +84,7 @@ SDEN prioritizes verifiability over authority:
 
 **Protocol Features**: Defined and specified in `docs/spec/`
 
-**Reference Implementation**: In planning phase. See [Reference Implementation Status](../reference-implementation/README.md) for details.
+**Reference Implementation**: Implemented in [`sden/`](../sden/) (producer node) and [`sden-client/`](../sden-client/) (buyer SDK). Validation currently uses a mock wallet and mock sensor; no end-to-end run against a live wallet and physical sensor is evidenced. See [Reference Implementation Status](../reference-implementation/README.md) for the full breakdown.
 
 ## Related Documentation
 

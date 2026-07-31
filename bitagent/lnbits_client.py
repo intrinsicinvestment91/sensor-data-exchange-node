@@ -1,3 +1,14 @@
+# Derived from the BitAgent project — upstream path: lnbits_client.py (root-level layout).
+# The executable code body is unchanged; this SDEN copy adds only provenance and licence
+# comments. No executable behavior was changed.
+#
+# Copyright (c) 2025 intrinsicinvestment91
+# SPDX-License-Identifier: MIT
+#
+# The full MIT licence text for this file is reproduced in THIRD_PARTY_NOTICES.md at the
+# root of this repository. SDEN's Apache-2.0 licence (see LICENSE) does not replace the
+# MIT terms for this file.
+
 import requests
 
 class LNbitsClient:

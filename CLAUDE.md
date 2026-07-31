@@ -17,12 +17,12 @@ Core producer modules exist under `sden/`. Buyer SDK exists under `sden-client/`
 
 ## Development Setup
 
-Requires **Python 3.12+**. The project vendors two files from bitagent — `bitagent/agent_wallet.py` and `bitagent/lnbits_client.py` — directly in the project root. No separate bitagent checkout is needed for development; their runtime dependencies (`requests`, `python-dotenv`) are pulled in by `requirements.txt`. The full `/home/charlie/bitagent` repo is only referenced when exploring the broader bitagent codebase.
+Requires **Python 3.12+**. The project vendors two files from BitAgent — `bitagent/agent_wallet.py` and `bitagent/lnbits_client.py` — into the `bitagent/` directory at the project root. See `THIRD_PARTY_NOTICES.md` for their provenance and licence. No separate BitAgent checkout is needed for development; their runtime dependencies (`requests`, `python-dotenv`) are pulled in by `requirements.txt`.
 
 Install SDEN's dev dependencies and create a `.env` in the project root:
 
 ```bash
-cd /home/charlie/sensor-data-exchange-node
+cd sensor-data-exchange-node
 pip install -r requirements-dev.txt
 
 # .env (copy from .env.example):
@@ -53,16 +53,25 @@ pytest                                                                # full tes
 pytest tests/test_integration.py::test_full_buy_cycle -v             # single test
 ```
 
-## The Bigger Picture — BitAgent
+## Vendored BitAgent Files
 
-**This project does not stand alone.** SDEN draws on BitAgent infrastructure. BitAgent (`/home/charlie/bitagent`) provides:
-- Lightning payment infrastructure — `AgentWallet` (`bitagent/agent_wallet.py`) wraps `LNbitsClient` — **this is the only bitagent component SDEN uses at runtime**
-- Base `Agent` class (`bitagent/src/core/agent.py`) — **do not extend; it cannot be instantiated** (see caveat below)
-- DID identity management (`bitagent/src/identity/enhanced_did.py`) — RSA, not usable for SDEN
-- Audit logging (`bitagent/src/monitoring/audit_logger.py`) — unsigned, not usable for SDEN
-- A2A JSON-RPC pattern (see `src/agents/streamfinder/` as reference)
+SDEN's only runtime dependency on BitAgent is the Lightning wallet wrapper. Two files are vendored
+into `bitagent/` and imported directly:
 
-The `.claude/settings.json` in this repo grants Claude Code read access to `/home/charlie/bitagent` so both codebases are in scope.
+- `bitagent/agent_wallet.py` — `AgentWallet`, a thin wrapper that reads `LNBITS_URL` and
+  `LNBITS_API_KEY` from the environment
+- `bitagent/lnbits_client.py` — `LNbitsClient`, the raw LNbits REST client it wraps
+
+They are derived from BitAgent's root-level layout and used under the MIT licence. Their executable
+code bodies are unchanged; the only SDEN-side addition is a provenance and licence comment header.
+Provenance and the full licence text are recorded in `THIRD_PARTY_NOTICES.md`. Nothing else from
+BitAgent is used at runtime, and no BitAgent checkout is required.
+
+If you want a local BitAgent checkout for exploration, set `BITAGENT_PATH` to it in your own
+environment — `.mcp.json` expands that variable in the MCP server's `args`, and there is
+deliberately no default, so an unset variable fails visibly instead of silently resolving to
+someone else's machine path. Grant directory access through your own untracked
+`.claude/settings.local.json`; machine-specific paths do not belong in tracked config.
 
 ## Protocol Flow (from RIS v1.0)
 
@@ -157,13 +166,13 @@ sden/
   pricing.py           # PricingEngine ABC + FlatPricingEngine (PRICE_SATS env var)
 ```
 
-**`reference-implementation/`** is a spec-compliance placeholder (README only, no code). The working implementation is `sden/`.
+**`reference-implementation/`** holds specification-conformance notes only (README, no code). The working implementation is `sden/`.
 
-**`SensorAgent` is standalone** — it does **not** extend `bitagent/src/core/agent.py:Agent`. The bitagent `Agent` base class cannot be instantiated (see caveat below). `SensorAgent` owns its own `AuditDB`, `DIDIdentity`, `StateMachine`, and `AgentWallet` directly.
+**`SensorAgent` is standalone** — it does not extend BitAgent's `Agent` type. That type is an abstract base class intended for subclassing, but direct reuse across repositories is complicated by constructor side effects and package-relative import assumptions (see the integration notes below). `SensorAgent` owns its own `AuditDB`, `DIDIdentity`, `StateMachine`, and `AgentWallet` directly.
 
 **MockSensorReader** supports: `temperature`, `humidity`, `pressure`, `co2`. Seeded with a fixed `seed` int for deterministic tests.
 
-**`sden-client/`** (buyer SDK, published to PyPI as `sden-client`) — exists and is complete:
+**`sden-client/`** (buyer SDK; packaged as `sden-client`, not yet published to PyPI — install from source with `pip install -e ./sden-client`):
 ```
 sden-client/
   sden_client/
@@ -176,14 +185,15 @@ sden-client/
 
 `SDENWallet` requires a **LNbits admin key** (not the invoice/read key) to pay outgoing invoices. `SDENBuyer` accepts any object with a `.pay_invoice(bolt11)` method, so you can substitute a mock in tests.
 
-## BitAgent Integration — Critical Caveats
+## Integration Notes
 
-### 1. Payment: use inline logic, not `@require_payment`
+### 1. Payment: inline wallet calls
 
-The `@require_payment` decorator in `bitagent/src/core/payment.py` is **not connected to the real LNbits wallet**. All working BitAgent agents use inline logic:
+`SensorAgent` calls the vendored `AgentWallet` directly rather than going through any decorator
+or middleware layer. The wallet is constructed once and used inline in the request handlers:
 
 ```python
-from bitagent.agent_wallet import AgentWallet
+from agent_wallet import AgentWallet   # vendored under bitagent/, added to sys.path
 
 wallet = AgentWallet()  # reads LNBITS_URL + LNBITS_API_KEY from env
 
@@ -197,9 +207,10 @@ if not paid:
     raise HTTPException(status_code=402, detail="Payment not verified")
 ```
 
-### 2. DID identity: Ed25519 from scratch — do not use `EnhancedDIDManager`
+### 2. DID identity: Ed25519, implemented in SDEN
 
-`bitagent/src/identity/enhanced_did.py` generates RSA-2048 — not Ed25519. RIS v1.0 requires `did:key:z6Mk...` (multibase base58btc of an Ed25519 public key). Implemented in `sden/did_identity.py`:
+RIS v1.0 requires `did:key:z6Mk...` — multibase base58btc of an **Ed25519** public key. SDEN
+implements this itself in `sden/did_identity.py` rather than reusing any external identity helper:
 
 ```python
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
@@ -207,17 +218,27 @@ import base58
 # DID URI: "did:key:z" + base58btc(0xed01 || pubkey_bytes)
 ```
 
-**`Agent` base class is broken — do not extend it.** `Agent.__init__` calls `SecureCommunicationManager.__init__`, which tries to construct `SecureMessage` as a utility object. `SecureMessage` is a dataclass requiring 6 positional args — this raises `TypeError` unconditionally.
+### 3. Base class: `SensorAgent` does not inherit
 
-### 3. Audit log: entries must be signed
+BitAgent's `Agent` type is an abstract base class intended for subclassing. SDEN does not build on
+it: cross-repository reuse is complicated by constructor side effects and package-relative import
+assumptions, so `SensorAgent` is standalone and composes its own collaborators. Only the LNbits
+wallet wrapper is reused, and it is vendored (see `THIRD_PARTY_NOTICES.md`).
 
-`AuditLogger` (bitagent) logs JSON but does **not sign entries**. `sden/audit_db.py` uses SQLite with a `signature TEXT NOT NULL` column. Every INSERT computes an Ed25519 signature over the serialized row content. Append-only is enforced by never calling UPDATE/DELETE (not via DB permissions). The `seen_request_ids` table provides replay-attack deduplication.
+### 4. Audit log: entries must be signed
 
-### 4. Nostr discovery: implemented but best-effort
+`sden/audit_db.py` uses SQLite with a `signature TEXT NOT NULL` column. Every INSERT computes an
+Ed25519 signature over the serialized row content. Append-only is enforced by never calling
+UPDATE/DELETE (not via DB permissions). The `seen_request_ids` table provides replay-attack
+deduplication.
 
-`bitagent/src/network/nostr.py` is empty. `SensorAgent._announce_nostr()` implements Kind 30078 producer announcement using `python-nostr`. Failures are caught and logged as warnings — discovery is non-fatal.
+### 5. Nostr discovery: implemented but best-effort
 
-### 5. Mock sensor mode is mandatory
+`SensorAgent._announce_nostr()` implements Kind 30078 producer announcement using `python-nostr`.
+Failures are caught and logged as warnings — discovery is non-fatal, and no test covers the live
+path.
+
+### 6. Mock sensor mode is mandatory
 
 Gate all sensor hardware access behind `USE_MOCK_SENSOR=true` env flag. `MockSensorReader` works without any hardware. This is required for CI, grant evaluators, and contributors without a physical DHT22.
 
@@ -249,10 +270,11 @@ Measured on minimum hardware (2-core ARMv8, 2 GB RAM). Assert these in CI with `
 
 ## Competitive Differentiation
 
-The strongest talking point vs. every competitor: **no new token, no new blockchain, runs on existing Bitcoin Lightning infrastructure**. When writing docs, READMEs, grant applications, or blog posts, lead with this. See `docs/PLAN.md` for the full competitor analysis and `docs/comparisons.md` (to be created in Phase 0) for detailed technical comparisons.
+The strongest talking point vs. every competitor: **no new token, no new blockchain, runs on existing Bitcoin Lightning infrastructure**. When writing docs or READMEs, lead with this. See `docs/comparisons.md` for the detailed technical comparison and `docs/PLAN.md` for the roadmap.
 
-## BitAgent Live State
+## Validation Boundary
 
-BitAgent is deployed at `https://bitagent-production.up.railway.app`. Full Lightning payment flow verified in production. Available agents: PriceOracleAgent (2 sats), WebFetchAgent (25 sats), SearchAgent (10 sats), PolyglotAgent (100 sats), StreamfinderAgent (100 sats — A2A JSON-RPC reference).
-
-BitAgent ships `mcp_server.py` — a Claude MCP stdio server exposing agents as tools (configured via `.mcp.json` in this repo and in the bitagent root).
+Validation currently uses a mock wallet and mock sensor; no end-to-end run against a live wallet
+and physical sensor is evidenced. CI runs lint, type-check, the test suite, and the RIS timing
+benchmark against mock backends only. Do not describe SDEN as production-ready, live-wallet
+validated, or hardware validated.

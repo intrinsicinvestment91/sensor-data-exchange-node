@@ -33,9 +33,9 @@ User-facing documentation for working with SDEN:
 
 - **[Features](FEATURES.md)** — Protocol features and capabilities
 - **[Architecture](ARCHITECTURE.md)** — High-level architecture overview
-- **[Installation](INSTALLATION.md)** — Installation instructions (when available)
-- **[Quick Start](QUICKSTART.md)** — Quick start guide (when available)
-- **[Configuration](CONFIGURATION.md)** — Configuration reference (when available)
+- **[Installation](INSTALLATION.md)** — Installation instructions
+- **[Quick Start](QUICKSTART.md)** — Quick start guide
+- **[Configuration](CONFIGURATION.md)** — Configuration reference
 - **[Use Cases](USE_CASES.md)** — Example use cases and applications
 - **[Contributing](CONTRIBUTING.md)** — How to contribute to SDEN
 
@@ -56,7 +56,7 @@ Reference implementations are non-authoritative and exist to validate the specif
 
 **Protocol Status**: Draft Protocol Specification (internally stable, subject to external review)
 
-**Implementation Status**: Protocol/Spec Maturity — Reference implementation is in planning phase. See [Reference Implementation Status](../reference-implementation/README.md) for details.
+**Implementation Status**: The reference implementation exists in [`sden/`](../sden/) (producer node) and [`sden-client/`](../sden-client/) (buyer SDK). Validation currently uses a mock wallet and mock sensor; no end-to-end run against a live wallet and physical sensor is evidenced. See [Reference Implementation Status](../reference-implementation/README.md) for the full breakdown.
 
 ## Getting Started
 

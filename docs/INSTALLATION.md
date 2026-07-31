@@ -1,35 +1,58 @@
 # Installation
 
-> **Status**: Not Implemented - Protocol Specification Phase
-> 
-> This section will be populated when the reference implementation reaches the appropriate maturity level. See [Reference Implementation Status](../reference-implementation/README.md) for current progress.
+Requires **Python 3.12+**. No sensor hardware is needed — mock sensor mode is the default.
 
-## Current Status
+## Producer node
 
-SDEN is currently in the **protocol/spec maturity** phase. The protocol specifications are defined and available for review, but the reference implementation is still in planning.
+**Docker (recommended):**
 
-Installation instructions will be available when:
-- The reference implementation is developed
-- Installation scripts and automation are created
-- Configuration systems are implemented
+```bash
+git clone https://github.com/intrinsicinvestment91/sensor-data-exchange-node
+cd sensor-data-exchange-node
+cp .env.example .env          # set LNBITS_URL and LNBITS_API_KEY
+docker-compose up
+```
 
-## What's Available Now
+`docker-compose` stores the Ed25519 identity key and the audit log in a named volume (`sden_data`),
+so the producer DID is stable across restarts.
 
-While installation instructions are not yet available, you can:
+**From source:**
 
-- **Review Protocol Specifications**: Understand the SDEN protocol by reading the [Protocol Specifications](spec/)
-- **Review Implementation Requirements**: See what the reference implementation will require in the [Reference Implementation Spec (RIS)](ris/SDEN_RIS_v1.md)
-- **Plan Your Implementation**: Use the specifications to plan your own SDEN implementation
+```bash
+pip install -r requirements.txt
+cp .env.example .env
+python -m sden.main
+```
 
-## Reference Implementation Status
+## Buyer SDK
 
-The reference implementation is currently in planning. When it becomes available, installation instructions will be documented here.
+`sden-client` is **not yet published to PyPI**. Install it from source:
 
-For current status, see: [Reference Implementation README](../reference-implementation/README.md)
+```bash
+pip install -e ./sden-client
+```
+
+This also installs the `sden-buy` CLI.
+
+## Development install
+
+```bash
+pip install -r requirements-dev.txt
+
+make test        # ruff + mypy + pytest
+make benchmark   # RIS v1.0 timing targets
+```
+
+Tests substitute a mock wallet and skip Nostr announcement, so no LNbits instance is required.
+
+## Validation boundary
+
+Validation currently uses a mock wallet and mock sensor; no end-to-end run against a live wallet
+and physical sensor is evidenced.
 
 ## Related Documentation
 
-- [Protocol Specifications](spec/) — Protocol definitions
-- [Reference Implementation Spec](ris/) — Implementation requirements
-- [Architecture](ARCHITECTURE.md) — System architecture
-- [Configuration](CONFIGURATION.md) — Configuration reference (when available)
+- [Configuration](CONFIGURATION.md) — environment variable reference
+- [Quick Start](QUICKSTART.md) — shortest path to a running node
+- [Architecture](ARCHITECTURE.md) — system architecture
+- [Reference Implementation Spec (RIS v1.0)](ris/SDEN_RIS_v1.md) — implementation requirements
