@@ -18,8 +18,7 @@
       "Bash(mkdocs*)",
       "Bash(find*)",
       "Bash(grep*)"
-    ],
-    "additionalDirectories": ["/home/charlie/bitagent"]
+    ]
   },
   "hooks": {
     "PostToolUse": [

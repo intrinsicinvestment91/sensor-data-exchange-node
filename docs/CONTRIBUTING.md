@@ -1,14 +1,17 @@
 # Contributing to SDEN
 
-Thank you for your interest in contributing to SDEN! This document outlines how you can contribute to the protocol specification and future implementations.
+Thank you for your interest in contributing to SDEN! This document covers contributions to the
+**protocol specification**. For contributions to the code, see
+[CONTRIBUTING.md](../CONTRIBUTING.md) at the repository root.
 
 ## Current Status
 
-SDEN is currently in the **protocol/spec maturity** phase. The primary focus is on:
+The protocol specification is frozen at RIS v1.0 and the reference implementation exists in
+[`sden/`](../sden/) and [`sden-client/`](../sden-client/). The focus of this document is:
 
 - Protocol specification review and refinement
 - Specification contributions and improvements
-- Planning for reference implementation
+- Keeping the implementation aligned with the specification
 
 ## How to Contribute
 
@@ -64,13 +67,15 @@ See [Governance](spec/governance.md) for complete governance details.
 
 ### 3. Contribute to Reference Implementation
 
-The reference implementation is currently in planning. When it becomes available:
+The reference implementation is available in [`sden/`](../sden/) and [`sden-client/`](../sden-client/):
 
 - **Implementation Contributions**: Contribute code to the reference implementation
 - **Testing**: Help test protocol compliance
 - **Documentation**: Improve implementation documentation
 
-**Current Status**: See [Reference Implementation README](../reference-implementation/README.md) for current status.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) at the repository root for development setup, and the
+[Reference Implementation README](../reference-implementation/README.md) for what is implemented,
+what is validated, and what remains planned.
 
 #### Reference Implementation Principles
 
@@ -102,9 +107,7 @@ The protocol specification is authoritative; implementations validate it, not de
 - **Consider Threat Model**: Ensure changes don't weaken security guarantees
 - **Maintain Minimalism**: Avoid adding unnecessary complexity
 
-### Code Contributions (Future)
-
-When the reference implementation is available:
+### Code Contributions
 
 - **Follow Code Style**: Adhere to project coding standards
 - **Write Tests**: Include tests that validate specification requirements

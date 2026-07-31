@@ -5,6 +5,11 @@
 **Research basis:** DePIN sector analysis, competitor audit (Ocean Protocol, Streamr, DIMO, peaq, IOTA Marketplace), GitHub growth patterns, grant landscape (OpenSats, HRF), W3C WoT standards, Lightning + IoT academic literature  
 **Spec version:** RIS v1.0 (frozen)
 
+> **Historical planning document.** Some milestones, implementation assumptions, and positioning
+> in this plan have been superseded. See the [root README](../README.md) and the
+> [reference implementation README](../reference-implementation/README.md) for the current
+> implementation and validation status.
+
 ---
 
 ## Vision
@@ -93,7 +98,7 @@ sden/
 
 ### Critical Implementation Decisions
 
-- **Ed25519 DID (not RSA):** `bitagent/src/identity/enhanced_did.py` generates RSA-2048 internally — not usable for SDEN. Implement proper `did:key:z6Mk...` encoding in `did_identity.py` using:
+- **Ed25519 DID (not RSA):** SDEN uses its own DID implementation rather than reusing BitAgent's, because the projects have different integration and packaging boundaries and RIS v1.0 requires Ed25519 specifically. Implement `did:key:z6Mk...` encoding in `did_identity.py` using:
   - `cryptography.hazmat.primitives.asymmetric.ed25519.Ed25519PrivateKey`
   - Multibase base58btc encoding of the public key bytes for the DID URI
   - Sign each sensor reading with the producer's Ed25519 private key
@@ -366,10 +371,10 @@ Allow a producer to prove a sensor reading falls within a claimed range (e.g., "
 
 | SDEN requirement | BitAgent component | File | Caveat |
 |---|---|---|---|
-| Lightning invoices | `AgentWallet` | `bitagent/agent_wallet.py` | Use inline; `@require_payment` decorator is broken |
-| Base agent class | `Agent` | `bitagent/src/core/agent.py` | Extend this; it wires monitoring and audit |
-| DID creation | — | custom `did_identity.py` | `EnhancedDIDManager` uses RSA, not Ed25519 — do not use |
-| Audit logging | `AuditLogger` | `bitagent/src/monitoring/audit_logger.py` | Extend to add Ed25519 signature per entry |
+| Lightning invoices | `AgentWallet` | `bitagent/agent_wallet.py` | Call inline; SDEN implements its payment boundary locally rather than importing BitAgent's `@require_payment` decorator, which is coupled to BitAgent's own runtime assumptions |
+| Base agent class | `Agent` | `bitagent/src/core/agent.py` | **Superseded.** The implemented SDEN reference system composes its own sensor agent rather than extending BitAgent's `Agent` base class because the projects have different initialization, packaging, and import boundaries |
+| DID creation | — | custom `did_identity.py` | Implemented in SDEN; RIS v1.0 requires Ed25519 `did:key`, and BitAgent's identity module generates RSA keys |
+| Audit logging | `AuditLogger` | `bitagent/src/monitoring/audit_logger.py` | **Superseded.** The implemented SDEN reference system uses its own signed append-only audit path rather than importing BitAgent's logger |
 | Nostr announcement | — | implement in `sensor_agent.py` | `bitagent/src/network/nostr.py` is empty |
 | Performance tracking | `AgentPerformanceTracker` | `bitagent/src/monitoring/performance_monitor.py` | Use directly; assert against RIS targets |
 

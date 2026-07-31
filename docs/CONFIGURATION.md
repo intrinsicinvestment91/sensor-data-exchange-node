@@ -1,46 +1,49 @@
 # Configuration
 
-> **Status**: Not Implemented - Protocol Specification Phase
-> 
-> This section will be populated when the reference implementation reaches the appropriate maturity level. See [Reference Implementation Status](../reference-implementation/README.md) for current progress.
+All settings are read from environment variables. Copy [`.env.example`](../.env.example) to `.env`
+and edit it.
 
-## Current Status
+The canonical variable reference — names, defaults, and descriptions — is the
+[Configuration table in the root README](../README.md#configuration). It is not duplicated here so
+the two cannot drift apart.
 
-SDEN is currently in the **protocol/spec maturity** phase. The protocol specifications are defined and available for review, but the reference implementation is still in planning.
+## Required
 
-Configuration documentation will be available when:
-- The reference implementation is developed
-- Configuration systems and file formats are defined
-- Configuration examples are created
+`LNBITS_URL` and `LNBITS_API_KEY` are required; the producer refuses to start without them. Use an
+LNbits **invoice/read** key for the producer. The buyer SDK's `SDENWallet` needs an **admin** key,
+because it pays outgoing invoices.
 
-## What's Available Now
+## Node identity
 
-While configuration documentation is not yet available, you can:
+On first boot the node generates an Ed25519 keypair and writes it to `DID_KEY_PATH`
+(`identity.pem` by default). The resulting `did:key:z6Mk…` is stable across restarts as long as
+that key persists.
 
-- **Review Protocol Requirements**: Understand what the protocol requires in the [Protocol Specifications](spec/)
-- **Review Implementation Requirements**: See configuration-related requirements in the [Reference Implementation Spec (RIS)](ris/SDEN_RIS_v1.md)
-- **Understand Architecture**: Review the [Architecture](ARCHITECTURE.md) to understand system components that will need configuration
+For containers and secrets managers, prefer injecting the key directly:
 
-## Reference Implementation Status
+```bash
+export DID_PRIVATE_KEY_PEM="$(cat identity.pem)"
+docker-compose up
+```
 
-The reference implementation is currently in planning. When it becomes available, configuration documentation will be provided here.
+The `docker-compose` setup keeps both the key and the audit database in the `sden_data` named
+volume. Neither `identity.pem` nor `audit.db` is tracked in Git — both are listed in
+[`.gitignore`](../.gitignore).
 
-For current status, see: [Reference Implementation README](../reference-implementation/README.md)
+## Sensors
 
-## Future Configuration Guide
+`USE_MOCK_SENSOR=true` (the default) uses `MockSensorReader`, which needs no hardware and supports
+`temperature`, `humidity`, `pressure`, and `co2`. Set it to `false` only on a node with a real
+DHT22 attached.
 
-When the reference implementation is ready, the configuration guide will include:
+## Validation boundary
 
-- Configuration file formats and locations
-- Node identity configuration
-- Settlement backend configuration (e.g., Lightning Network)
-- Network and discovery settings
-- Security and key management configuration
-- Example configurations for different node types
+Validation currently uses a mock wallet and mock sensor; no end-to-end run against a live wallet
+and physical sensor is evidenced.
 
 ## Related Documentation
 
-- [Protocol Specifications](spec/) — Protocol definitions
-- [Reference Implementation Spec](ris/) — Implementation requirements
-- [Architecture](ARCHITECTURE.md) — System architecture
-- [Installation](INSTALLATION.md) — Installation instructions (when available)
+- [Installation](INSTALLATION.md) — installation options
+- [Quick Start](QUICKSTART.md) — shortest path to a running node
+- [Architecture](ARCHITECTURE.md) — system architecture
+- [Reference Implementation Spec (RIS v1.0)](ris/SDEN_RIS_v1.md) — implementation requirements

@@ -1,9 +1,9 @@
 """SensorAgent — FastAPI app + state machine + Lightning payment flow.
 
-Note: bitagent's Agent base class cannot be instantiated due to a bug in
-SecureCommunicationManager (it tries to construct a SecureMessage data object
-as a utility class). SensorAgent is therefore standalone, using only
-AgentWallet from bitagent (the one component that works).
+Note: BitAgent's Agent type is an abstract base class intended for subclassing, but
+direct reuse across repositories is complicated by constructor side effects and
+package-relative import assumptions. SensorAgent is therefore standalone and reuses
+only AgentWallet, which is vendored under bitagent/ (see THIRD_PARTY_NOTICES.md).
 """
 
 import logging
