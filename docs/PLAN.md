@@ -372,9 +372,9 @@ Allow a producer to prove a sensor reading falls within a claimed range (e.g., "
 | SDEN requirement | BitAgent component | File | Caveat |
 |---|---|---|---|
 | Lightning invoices | `AgentWallet` | `bitagent/agent_wallet.py` | Call inline; SDEN implements its payment boundary locally rather than importing BitAgent's `@require_payment` decorator, which is coupled to BitAgent's own runtime assumptions |
-| Base agent class | `Agent` | `bitagent/src/core/agent.py` | Extend this; it wires monitoring and audit |
+| Base agent class | `Agent` | `bitagent/src/core/agent.py` | **Superseded.** The implemented SDEN reference system composes its own sensor agent rather than extending BitAgent's `Agent` base class because the projects have different initialization, packaging, and import boundaries |
 | DID creation | — | custom `did_identity.py` | Implemented in SDEN; RIS v1.0 requires Ed25519 `did:key`, and BitAgent's identity module generates RSA keys |
-| Audit logging | `AuditLogger` | `bitagent/src/monitoring/audit_logger.py` | Extend to add Ed25519 signature per entry |
+| Audit logging | `AuditLogger` | `bitagent/src/monitoring/audit_logger.py` | **Superseded.** The implemented SDEN reference system uses its own signed append-only audit path rather than importing BitAgent's logger |
 | Nostr announcement | — | implement in `sensor_agent.py` | `bitagent/src/network/nostr.py` is empty |
 | Performance tracking | `AgentPerformanceTracker` | `bitagent/src/monitoring/performance_monitor.py` | Use directly; assert against RIS targets |
 
